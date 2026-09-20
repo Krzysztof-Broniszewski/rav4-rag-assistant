@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment variables / API keys
+.env
+
+# VS Code
+.vscode/
+
+# Source documents
+data/*
+!data/.gitkeep
