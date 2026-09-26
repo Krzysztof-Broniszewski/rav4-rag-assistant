@@ -5,6 +5,8 @@ from transformers import AutoTokenizer
 
 INPUT_PATH = Path("data/processed/rav4_manual.json")
 
+OUTPUT_PATH = Path("data/processed/rav4_chunks.json")
+
 FOOTER_PATTERN = r"19 RAV4 HV OM42D12E\s+\d+/\d+/\d+\s+\d+:\d+\s+Page\s+\d+"
 
 HYPHENATION_PATTERN = r"-\n(?=\w)"
@@ -27,21 +29,34 @@ def split_into_chunks(text):
         chunk_tokens = tokens[start : stop]
         chunk_text = TOKENIZER.decode(chunk_tokens)
         local_chunks.append(chunk_text)
+
     return local_chunks
                        
 
+def add_section_chunks(section_text, current_section, chunks):
+    section_chunks = split_into_chunks(section_text)
+
+    for section_chunk in section_chunks:
+        chunk_data = {
+            "chunk_id": len(chunks),
+            "section": current_section,
+            "text": section_chunk
+        }
+        chunks.append(chunk_data)
 
 with open(INPUT_PATH, "r", encoding="utf-8")as file:
     pages_data = json.load(file)
 
     current_section = None
     section_text = ""
-    section_chunks = []
     chunks = []
 
     for page in pages_data:
 
         text = page["text"]
+
+        if page["page"] > 600 and "Alfabetyczny wykaz haseł" in text:
+            break
 
         text = re.sub(FOOTER_PATTERN, "", text)
         text = re.sub(HYPHENATION_PATTERN, "", text)
@@ -51,17 +66,36 @@ with open(INPUT_PATH, "r", encoding="utf-8")as file:
         for section in sections:
             if section.split()[-1].isdigit():
                 page_num = int(section.split()[-1])
+
                 if page_num == page["page"]:
                     clean_header = " ".join(section.split()[:-1])
 
                     if section_text:
-                        section_chunks = split_into_chunks(section_text)
-                        print(section_chunks)
+                        add_section_chunks(
+                            section_text,
+                            current_section,
+                            chunks
+                        )
+                        section_text = ""
+
                     current_section = clean_header
                     text = text.replace(section, "")
 
-        section_text += " " + text
+        if current_section:
+            section_text += " " + text
+    if section_text:
+        add_section_chunks(
+            section_text,
+            current_section,
+            chunks
+        )
 
+    print(len(chunks))
+    print(chunks[0])
+    print(chunks[-1])
+
+with open(OUTPUT_PATH, "w", encoding="utf-8") as file:
+    json.dump(chunks, file, ensure_ascii=False, indent=2)
         # for page in pages_data:
 
         #     text = page["text"]
