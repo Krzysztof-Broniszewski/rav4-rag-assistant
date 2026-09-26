@@ -36,5 +36,8 @@ index.add(embeddings)
 
 faiss.write_index(index, str(INDEX_PATH))
 
+
+print(chunks[0])
+
 # similarity = np.dot(embeddings[0], embeddings[1])
 # print(similarity)
