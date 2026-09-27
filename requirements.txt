@@ -1,0 +1,9 @@
+pypdf
+transformers
+sentence-transformers
+torch
+numpy
+faiss-cpu
+ollama
+fastapi
+uvicorn
