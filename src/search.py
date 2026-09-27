@@ -26,7 +26,9 @@ MODEL = SentenceTransformer(MODEL_NAME, device=device)
 # QUERY = "Jak wyregulować fotel kierowcy?"
 # QUERY = "Jak wymienić żarówkę kierunkowskazu prawy przód?"
 # QUERY = "Jaka żarówka do kierunkowskazu przód?"
-QUERY = "Jak ugotować bigos?"
+# QUERY = "Jak ugotować bigos?"
+# QUERY = "Jakie płyny chłodzące zalewać i kupić do tego auta?"
+QUERY = "Czy do obydwu zbiorników płynu chłodzącego wlewa się ten sam płyn? Do chłodzenia silnika spalinowego i elektrycznego?"
 
 query = "query: " + QUERY
 
