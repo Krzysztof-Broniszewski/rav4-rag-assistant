@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>RAV4 RAG Assistant</title>
+    <style>
+        #question {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #ask-button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #chat {
+        margin-top: 25px;
+        margin-bottom: 25px;
+        }
+
+        .user-message {
+            margin: 15px 0 15px auto;
+            padding: 12px 16px;
+            max-width: 70%;
+            width: fit-content;
+            background: #e5e5e5;
+            border-radius: 15px;
+            font-size: 17px;
+        }
+
+        .assistant-message {
+            margin: 15px 0 30px 0;
+            padding: 12px 0;
+            max-width: 85%;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>RAV4 RAG Assistant</h1>
+
+    <textarea id="question"></textarea>
+    <button id="ask-button">Zapytaj</button>
+
+    <div id="chat"></div>
+<script>
+    document.getElementById("ask-button").addEventListener("click", async function () {
+        const question = document.getElementById("question").value;
+
+        const chat = document.getElementById("chat");
+
+        const response = await fetch("/ask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                question: question
+            })
+        });
+    const data = await response.json();
+    const userMessage = document.createElement("div");
+    userMessage.textContent = question;
+    userMessage.className = "user-message";
+
+    const assistantMessage = document.createElement("div");
+    assistantMessage.textContent = data.answer;
+    assistantMessage.className = "assistant-message";
+
+    chat.appendChild(userMessage);
+    chat.appendChild(assistantMessage);
+    document.getElementById("answer").textContent = data.answer;
+    });
+</script>
+</body>
+</html>
