@@ -2,7 +2,7 @@ import ollama
 
 class Generator:
     def __init__(self):
-        self.model_name = "SpeakLeash/bielik-11b-v2.3-instruct:Q8_0"
+        self.model_name = "hf.co/SpeakLeash/Bielik-4.5B-v3.0-Instruct-GGUF:Q8_0"
         self.system_prompt = """Jesteś asystentem technicznym.
 
         Odpowiadaj bezpośrednio na zadane pytanie.

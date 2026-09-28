@@ -11,6 +11,7 @@ class RAGPipeline:
     def retrieve(self, question):
         candidates = self.retriever.search(question)
         reranked_results = self.reranker.rerank(question, candidates)
+        print(reranked_results)
         return reranked_results
 
     def answer(self, question):
@@ -19,5 +20,5 @@ class RAGPipeline:
 
 if __name__ == "__main__":
     pipeline = RAGPipeline()
-    answer = pipeline.answer("Jakie ciśnienie powinno być w oponach?")
+    answer = pipeline.answer("Jak wyłączyć system PCS?")
     print(answer)
